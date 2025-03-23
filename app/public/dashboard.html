@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>แดชบอร์ด - Rimberio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-green-900 text-white p-4 flex justify-between items-center">
+    <h2 class="text-xl font-bold">Rimberio</h2>
+    <nav>
+      <a href="index.html" class="hover:underline">หน้าแรก</a>
+    </nav>
+  </header>
+
+  <main class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-6 text-center">ข้อมูลบัญชี</h2>
+
+    <div class="flex flex-col items-center gap-6 mb-10">
+      <div class="w-24 h-24 bg-gray-400 rounded-full text-white text-3xl flex items-center justify-center">
+        <span id="profileInitial">U</span>
+      </div>
+
+      <div class="relative w-80">
+        <input id="usernameInput" type="text" class="w-full border px-4 py-2 rounded bg-gray-100" disabled>
+        <button id="editUsernameBtn" class="absolute top-2 right-2 text-gray-600 hover:text-black">✏️</button>
+      </div>
+
+      <input type="password" value="********" class="w-80 border px-4 py-2 rounded bg-gray-100" disabled>
+
+      <div class="flex gap-4">
+        <button onclick="openChangePasswordModal()" class="border border-green-500 text-green-600 px-4 py-2 rounded hover:bg-green-100">เปลี่ยนรหัสผ่าน</button>
+        <button onclick="updateUsername()" class="border border-green-500 text-green-600 px-4 py-2 rounded hover:bg-green-100">บันทึก</button>
+      </div>
+    </div>
+
+    <!-- Summary Result -->
+    <div class="bg-white rounded-lg shadow p-6 text-center mb-6">
+      <h3 class="text-xl font-semibold mb-4">คะแนนรวม</h3>
+      <div id="total" class="text-4xl font-bold">-</div>
+      <div id="level" class="mt-2 text-lg">-</div>
+    </div>
+
+    <!-- Score List -->
+    <div class="bg-white rounded-lg shadow p-6 mb-6">
+      <h3 class="text-lg font-semibold mb-4">คะแนนแต่ละข้อ:</h3>
+      <ul id="questions" class="grid grid-cols-2 gap-2 text-sm"></ul>
+    </div>
+
+    <!-- Score History Table -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-lg font-semibold mb-4">ประวัติการประเมินของคุณ</h3>
+      <div class="overflow-x-auto">
+        <table class="min-w-full text-sm text-left border">
+          <thead class="bg-gray-100 text-gray-600">
+            <tr>
+              <th class="px-4 py-2">ครั้งที่</th>
+              <th class="px-4 py-2">วันที่/เวลา</th>
+              <th class="px-4 py-2">คะแนนรวม</th>
+              <th class="px-4 py-2">ระดับความเครียด</th>
+            </tr>
+          </thead>
+          <tbody id="historyTable" class="text-gray-800"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <div id="passwordModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded w-96">
+      <h3 class="text-xl font-semibold mb-4">เปลี่ยนรหัสผ่าน</h3>
+      <input id="oldPassword" type="password" placeholder="รหัสผ่านเดิม" class="w-full mb-2 border px-3 py-2 rounded">
+      <input id="newPassword" type="password" placeholder="รหัสผ่านใหม่" class="w-full mb-2 border px-3 py-2 rounded">
+      <input id="confirmPassword" type="password" placeholder="ยืนยันรหัสผ่านใหม่" class="w-full mb-4 border px-3 py-2 rounded">
+      <div class="flex justify-end gap-2">
+        <button onclick="closeChangePasswordModal()" class="text-red-600 hover:underline">ยกเลิก</button>
+        <button onclick="changePassword()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ... (เหมือนเดิมทุกอย่างด้านบน) -->
+<script>
+  const API = 'https://cf3a-2405-9800-b650-9479-b548-6ce0-ca6b-61ed.ngrok-free.app';
+  const userId = localStorage.getItem("userId");
+  const username = localStorage.getItem("username") || "";
+
+  document.getElementById("usernameInput").value = username;
+  document.getElementById("profileInitial").innerText = username.charAt(0).toUpperCase();
+
+  document.getElementById("editUsernameBtn").addEventListener("click", () => {
+    document.getElementById("usernameInput").disabled = false;
+    document.getElementById("usernameInput").focus();
+  });
+
+  function updateUsername() {
+    const newUsername = document.getElementById("usernameInput").value.trim();
+    if (!newUsername) return alert("กรุณากรอกชื่อผู้ใช้ใหม่");
+
+    fetch(`${API}/api/auth/update-username`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, newUsername })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("✅ อัปเดตชื่อผู้ใช้สำเร็จ");
+        localStorage.setItem("username", newUsername);
+        location.reload();
+      } else {
+        alert("❌ " + data.message);
+      }
+    })
+    .catch(() => alert("❌ เกิดข้อผิดพลาดในการอัปเดตชื่อผู้ใช้"));
+  }
+
+  function openChangePasswordModal() {
+    document.getElementById("passwordModal").classList.remove("hidden");
+  }
+
+  function closeChangePasswordModal() {
+    document.getElementById("passwordModal").classList.add("hidden");
+  }
+
+  function changePassword() {
+    const oldPassword = document.getElementById("oldPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) {
+      return alert("❌ รหัสผ่านใหม่ไม่ตรงกัน");
+    }
+
+    fetch(`${API}/api/auth/change-password`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, oldPassword, newPassword })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("✅ เปลี่ยนรหัสผ่านสำเร็จ");
+        closeChangePasswordModal();
+      } else {
+        alert("❌ " + data.message);
+      }
+    })
+    .catch(() => alert("❌ เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน"));
+  }
+
+  function getScoreColor(score) {
+    if (score <= 20) return "text-[#22c55e]";
+    else if (score <= 40) return "text-[#eab308]";
+    else if (score <= 60) return "text-[#f97316]";
+    else return "text-[#ef4444]";
+  }
+
+  // ✅ โหลดผลล่าสุด
+  fetch(`${API}/api/survey/user/${userId}`)
+    .then(async res => {
+      const contentType = res.headers.get("content-type");
+      if (!res.ok || !contentType.includes("application/json")) {
+        throw new Error("ไม่ได้รับ JSON");
+      }
+      return res.json();
+    })
+    .then(result => {
+      if (!result.success || !Array.isArray(result.data)) {
+        throw new Error("ข้อมูลไม่ถูกต้อง");
+      }
+
+      const latest = result.data[0];
+      const totalElem = document.getElementById("total");
+      totalElem.innerText = latest.totalScore ?? "-";
+      totalElem.className = "text-4xl font-bold " + getScoreColor(latest.totalScore);
+      document.getElementById("level").innerText = latest.stressLevel ?? "-";
+
+      const qList = document.getElementById("questions");
+      qList.innerHTML = "";
+      (latest.scores || []).forEach((score, i) => {
+        const li = document.createElement("li");
+        li.innerText = `Q${i + 1}: ${score}`;
+        qList.appendChild(li);
+      });
+    })
+    .catch(err => {
+      console.error("❌ ไม่สามารถโหลดผลล่าสุด:", err.message);
+      document.getElementById("total").innerText = "-";
+      document.getElementById("level").innerText = "-";
+    });
+
+  // ✅ โหลดประวัติการทำแบบสอบถาม
+  fetch(`${API}/api/survey/history/${userId}`)
+    .then(async res => {
+      const contentType = res.headers.get("content-type");
+      if (!res.ok || !contentType.includes("application/json")) {
+        throw new Error("ไม่ได้รับข้อมูล JSON จากเซิร์ฟเวอร์");
+      }
+      return res.json();
+    })
+    .then(result => {
+      if (!result.success || !Array.isArray(result.data)) {
+        console.error("📛 ข้อมูลไม่ใช่ array:", result);
+        throw new Error("รูปแบบข้อมูลผิด");
+      }
+
+      const table = document.getElementById("historyTable");
+      table.innerHTML = "";
+
+      result.data.forEach((item, index) => {
+        const tr = document.createElement("tr");
+        tr.classList.add(index % 2 === 0 ? "bg-white" : "bg-gray-50");
+
+        const date = new Date(item.timestamp);
+        const dateStr = date.toLocaleDateString('th-TH') + ' ' + date.toLocaleTimeString('th-TH');
+
+        const scoreColor = getScoreColor(item.totalScore);
+
+        tr.innerHTML = `
+          <td class="border px-4 py-2">${index + 1}</td>
+          <td class="border px-4 py-2">${dateStr}</td>
+          <td class="border px-4 py-2 text-center ${scoreColor}">${item.totalScore}</td>
+          <td class="border px-4 py-2">${item.stressLevel}</td>
+        `;
+        table.appendChild(tr);
+      });
+    })
+    .catch(err => {
+      console.error("⚠️ ดึงข้อมูลไม่สำเร็จ:", err.message);
+    });
+</script>
+</body>
+</html>
