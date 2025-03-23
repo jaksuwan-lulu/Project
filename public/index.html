@@ -103,7 +103,7 @@
   </div>
 
   <script>
-    const API = 'https://project-6m94.onrender.com/';
+    const API = 'https://project-6m94.onrender.com';
 
     function openLoginModal() {
       document.getElementById("loginModal").classList.remove("hidden");
@@ -123,7 +123,7 @@
       const password = document.getElementById("loginPassword").value;
       if (!username || !password) return alert("กรุณากรอก username และ password ให้ครบ");
       try {
-        const res = await fetch(`${API}/api/auth/login`, {
+        const res = await fetch(`/api/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password })
