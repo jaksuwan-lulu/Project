@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 app.use(cors({
-  origin: 'https://project-6m94.onrender.com', // 🔥 เปลี่ยนเป็น URL จริงของ frontend
+  origin: '*', // 🔥 เปลี่ยนเป็น URL จริงของ frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
