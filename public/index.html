@@ -147,7 +147,7 @@
       const password = document.getElementById("registerPassword").value;
       if (!username || !password) return alert("กรุณากรอก username และ password ให้ครบ");
       try {
-        const res = await fetch(`${API}/api/auth/register`, {
+        const res = await fetch(`/api/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password })
