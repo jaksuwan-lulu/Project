@@ -98,7 +98,7 @@
     const newUsername = document.getElementById("usernameInput").value.trim();
     if (!newUsername) return alert("กรุณากรอกชื่อผู้ใช้ใหม่");
 
-    fetch(`${API}/api/auth/update-username`, {
+    fetch(`/api/auth/update-username`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, newUsername })
@@ -133,7 +133,7 @@
       return alert("❌ รหัสผ่านใหม่ไม่ตรงกัน");
     }
 
-    fetch(`${API}/api/auth/change-password`, {
+    fetch(`/api/auth/change-password`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, oldPassword, newPassword })
@@ -158,7 +158,7 @@
   }
 
   // ✅ โหลดผลล่าสุด
-  fetch(`${API}/api/survey/user/${userId}`)
+  fetch(`/api/survey/user/${userId}`)
     .then(async res => {
       const contentType = res.headers.get("content-type");
       if (!res.ok || !contentType.includes("application/json")) {
@@ -192,7 +192,7 @@
     });
 
   // ✅ โหลดประวัติการทำแบบสอบถาม
-  fetch(`${API}/api/survey/history/${userId}`)
+  fetch(`/api/survey/history/${userId}`)
     .then(async res => {
       const contentType = res.headers.get("content-type");
       if (!res.ok || !contentType.includes("application/json")) {
