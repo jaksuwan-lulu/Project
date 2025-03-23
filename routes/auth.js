@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
 // ✅ สมัครสมาชิก
@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ success: false, message: '⚠️ Username นี้ถูกใช้ไปแล้ว' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = bcrypt.hashSync(password, 10);
     const newUser = new User({
       UserID: uuidv4(),
       username,
@@ -107,7 +107,7 @@ router.put('/change-password', async (req, res) => {
       return res.status(401).json({ success: false, message: '❌ รหัสผ่านเดิมไม่ถูกต้อง' });
     }
 
-    const hashedNew = await bcrypt.hash(newPassword, 10);
+    const hashedNew = bcrypt.hashSync(newPassword, 10);
     foundUser.password = hashedNew;
     await foundUser.save();
 
