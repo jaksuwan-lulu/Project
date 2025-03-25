@@ -9,7 +9,7 @@
     <script>
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
-    
+  
       function drawChart() {
         fetch("/api/survey/summary")
           .then(response => response.json())
@@ -32,72 +32,50 @@
           });
       }
     </script>
-    
-    <style>
-      .nav-link {
-        position: relative;
-      }
-      .nav-link::after {
-        content: "";
-        position: absolute;
-        left: 0;
-        bottom: -2px;
-        width: 0%;
-        height: 2px;
-        background-color: white;
-        transition: width 0.3s ease-in-out;
-      }
-      .nav-link:hover::after {
-        width: 100%;
-      }
-    </style>
   </head>
   
   <body class="bg-white text-gray-900">
-    <header class="bg-green-900 text-white py-4 px-8 shadow-md">
-      <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Rimberio</h1>
-        <nav>
-          <ul class="flex space-x-6 text-sm md:text-base">
-            <li><a href="index.html" class="nav-link hover:underline">หน้าแรก</a></li>
-            <li><a href="about_stress.html" class="nav-link hover:underline">เกี่ยวกับความเครียด</a></li>
-            <li><a href="stress_levels.html" class="nav-link hover:underline">ระดับความเครียด</a></li>
-            <li><a href="support_channels.html" class="nav-link hover:underline">ช่องทางให้คำปรึกษา</a></li>
-          </ul>
-        </nav>
-        <div id="authButtons" class="space-x-2">
-          <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200 transition">Login</button>
-          <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition">Register</button>
-        </div>
-        <div id="profileDropdown" class="relative hidden">
-          <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center transition-transform hover:scale-105" onclick="toggleDropdown()">
-            <span id="profileInitial">U</span>
-          </button>
-          <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg border border-gray-200 hidden z-50">
-            <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Profile</a>
-            <button onclick="logout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
-          </div>
+    <header class="bg-green-900 text-white py-4 px-4 sm:px-8 flex flex-wrap sm:flex-nowrap justify-between items-center shadow-md">
+      <h1 class="text-2xl font-bold w-full sm:w-auto text-center sm:text-left">Rimberio</h1>
+      <nav class="w-full sm:w-auto mt-4 sm:mt-0">
+        <ul class="flex flex-wrap justify-center sm:justify-start gap-4 sm:gap-6">
+          <li><a href="index.html" class="hover:underline">หน้าแรก</a></li>
+          <li><a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a></li>
+          <li><a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a></li>
+          <li><a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a></li>
+        </ul>
+      </nav>
+      <div id="authButtons" class="flex flex-wrap justify-center sm:justify-end gap-2 mt-4 sm:mt-0">
+        <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
+        <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
+      </div>
+      <div id="profileDropdown" class="relative hidden mt-4 sm:mt-0">
+        <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center" onclick="toggleDropdown()">
+          <span id="profileInitial">U</span>
+        </button>
+        <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg border border-gray-200 hidden z-50">
+          <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Profile</a>
+          <button onclick="logout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
         </div>
       </div>
     </header>
-
-  <main class="container mx-auto py-16 px-8 flex justify-between items-center">
-    <div class="max-w-lg">
-      <h2 class="text-4xl font-bold text-green-900">คิดว่าคุณมี<br>ความเครียดแค่ไหน ?</h2>
-      <p class="mt-4 text-gray-700">ความเครียดเป็นส่วนหนึ่งของชีวิต แต่การรับรู้ระดับความเครียดของตนเองสามารถช่วยให้เราจัดการกับมันได้ดีขึ้น มาดูระดับความเครียดของคุณกันเถอะ!</p>
-      <a href="about_stress.html" class="mt-6 bg-orange-500 text-white px-4 py-2 rounded-lg inline-block">เริ่มต้น →</a>
-    </div>
-    <div class="bg-green-700 text-white w-[500px] h-[500px] flex items-center justify-center rounded-lg">
-      <div id="piechart" class="w-full h-full"></div>
-    </div>
-  </main>
-
-  <df-messenger intent="WELCOME" chat-title="บอทความเครียด" agent-id="1e39fe9e-753e-4ebd-9029-7902adf6d9c8" language-code="th"
-    style="--df-messenger-button-titlebar-color: #2E7D32; --df-messenger-send-icon: #2E7D32;">
-    <df-messenger-chat-bubble
-      user-id="" id="chat-bubble"></df-messenger-chat-bubble>
-  </df-messenger>
-  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  
+    <main class="container mx-auto py-12 px-4 md:px-8 flex flex-col lg:flex-row items-center gap-12">
+      <div class="w-full lg:w-1/2 text-center lg:text-left">
+        <h2 class="text-3xl sm:text-4xl font-bold text-green-900">คิดว่าคุณมี<br class="hidden sm:inline">ความเครียดแค่ไหน ?</h2>
+        <p class="mt-4 text-gray-700 text-base sm:text-lg">ความเครียดเป็นส่วนหนึ่งของชีวิต แต่การรับรู้ระดับความเครียดของตนเองสามารถช่วยให้เราจัดการกับมันได้ดีขึ้น มาดูระดับความเครียดของคุณกันเถอะ!</p>
+        <a href="about_stress.html" class="mt-6 inline-block bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition">เริ่มต้น →</a>
+      </div>
+      <div class="w-full lg:w-1/2 max-w-md aspect-square bg-green-700 rounded-lg flex items-center justify-center">
+        <div id="piechart" class="w-full h-full"></div>
+      </div>
+    </main>
+  
+    <df-messenger intent="WELCOME" chat-title="บอทความเครียด" agent-id="1e39fe9e-753e-4ebd-9029-7902adf6d9c8" language-code="th"
+      style="--df-messenger-button-titlebar-color: #2E7D32; --df-messenger-send-icon: #2E7D32;">
+      <df-messenger-chat-bubble user-id="" id="chat-bubble"></df-messenger-chat-bubble>
+    </df-messenger>
+    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
 
   <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
     <div class="bg-white p-6 rounded-lg w-80">
@@ -123,7 +101,7 @@
     </div>
   </div>
 
-  <script> 
+  <script>
     const API = 'https://project-6m94.onrender.com';
 
     function openLoginModal() {
@@ -213,5 +191,5 @@
       }
     }
   </script>
-  </body>
+</body>
 </html>
