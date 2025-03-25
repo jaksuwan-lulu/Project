@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ระดับความเครียด - Rimberio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    html {
-      scroll-behavior: smooth;
-    }
-  </style>
-</head>
-<body class="bg-gray-100 text-gray-900">
-  <header class="bg-green-900 text-white py-4 px-8 flex flex-col items-center shadow-md">
-    <h1 class="text-2xl font-bold">Rimberio - ระดับความเครียด</h1>
-    <nav class="mt-2">
-        <ul class="flex space-x-6">
-            <li><a href="index.html" class="hover:underline">หน้าแรก</a></li>
-            <li><a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a></li>
-            <li><a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a></li>
-            <li><a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a></li>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ระดับความเครียด - Rimberio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900">
+    <!-- Header/Navbar -->
+    <header class="bg-green-900 text-white px-8 py-4 shadow-md flex justify-between items-center">
+      <div class="text-xl font-bold">Rimberio</div>
+      <nav>
+        <ul class="flex space-x-6 text-white">
+          <li><a href="index.html" class="hover:underline">หน้าแรก</a></li>
+          <li><a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a></li>
+          <li><a href="stress_levels.html" class="hover:underline font-semibold">ระดับความเครียด</a></li>
+          <li><a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a></li>
         </ul>
-    </nav>
-  </header>
-
-  <div class="w-full sticky top-0 z-10 bg-gray-100/75 backdrop-blur-md shadow-md py-4 flex justify-center space-x-4">
-    <a href="#level1" class="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-800">ระดับ 1</a>
-    <a href="#level2" class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600">ระดับ 2</a>
-    <a href="#level3" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">ระดับ 3</a>
-    <a href="#level4" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">ระดับ 4</a>
-  </div>
+      </nav>
+      <div id="authButtons" class="space-x-2">
+        <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
+        <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
+      </div>
+      <div id="profileDropdown" class="relative hidden">
+        <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center" onclick="toggleDropdown()">
+          <span id="profileInitial">U</span>
+        </button>
+        <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg border border-gray-200 hidden z-50">
+          <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Profile</a>
+          <button onclick="logout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+        </div>
+      </div>
+    </header>
+  
+    <!-- Quick Nav Scroll Buttons -->
+    <div class="w-full sticky top-0 z-10 bg-white/80 backdrop-blur shadow-md py-4 flex justify-center space-x-4">
+      <a href="#level1" class="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-800">ระดับ 1</a>
+      <a href="#level2" class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600">ระดับ 2</a>
+      <a href="#level3" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600">ระดับ 3</a>
+      <a href="#level4" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">ระดับ 4</a>
+    </div>
 
   <main class="container mx-auto px-8">
     <!-- เนื้อหาแต่ละระดับ -->
@@ -117,5 +132,57 @@
         </ul>
       </section>      
   </main>
+    <!-- ✅ Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white p-6 rounded-lg w-80">
+        <h2 class="text-xl font-semibold mb-4 text-green-800">เข้าสู่ระบบ</h2>
+        <input id="loginUsername" type="text" placeholder="Username" class="w-full border px-3 py-2 mb-2 rounded">
+        <input id="loginPassword" type="password" placeholder="Password" class="w-full border px-3 py-2 mb-4 rounded">
+        <div class="flex justify-between">
+          <button onclick="login()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">เข้าสู่ระบบ</button>
+          <button onclick="closeLoginModal()" class="text-red-500 hover:underline">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- ✅ Register Modal -->
+    <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white p-6 rounded-lg w-80">
+        <h2 class="text-xl font-semibold mb-4 text-orange-700">สมัครสมาชิก</h2>
+        <input id="registerUsername" type="text" placeholder="Username" class="w-full border px-3 py-2 mb-2 rounded">
+        <input id="registerPassword" type="password" placeholder="Password" class="w-full border px-3 py-2 mb-4 rounded">
+        <div class="flex justify-between">
+          <button onclick="register()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">สมัครสมาชิก</button>
+          <button onclick="closeRegisterModal()" class="text-red-500 hover:underline">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
+  <script>
+    function openLoginModal() {
+      alert("คุณคลิกปุ่ม Login (เชื่อมต่อกับ modal จริงได้ในภายหลัง)");
+    }
+    function openRegisterModal() {
+      alert("คุณคลิกปุ่ม Register (เชื่อมต่อกับ modal จริงได้ในภายหลัง)");
+    }
+    function toggleDropdown() {
+      document.getElementById("dropdownMenu").classList.toggle("hidden");
+    }
+    function logout() {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("username");
+      alert("👋 ออกจากระบบแล้ว");
+      location.reload();
+    }
+    window.onload = () => {
+      const userId = localStorage.getItem("userId");
+      const username = localStorage.getItem("username") || "";
+      const isLoggedIn = !!userId;
+      document.getElementById("authButtons").style.display = isLoggedIn ? "none" : "flex";
+      document.getElementById("profileDropdown").style.display = isLoggedIn ? "block" : "none";
+      if (isLoggedIn) {
+        document.getElementById("profileInitial").innerText = username.charAt(0).toUpperCase();
+      }
+    }
+  </script>
 </body>
 </html>
