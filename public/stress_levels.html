@@ -157,32 +157,90 @@
         </div>
       </div>
     </div>
-  <script>
-    function openLoginModal() {
-      alert("คุณคลิกปุ่ม Login (เชื่อมต่อกับ modal จริงได้ในภายหลัง)");
-    }
-    function openRegisterModal() {
-      alert("คุณคลิกปุ่ม Register (เชื่อมต่อกับ modal จริงได้ในภายหลัง)");
-    }
-    function toggleDropdown() {
-      document.getElementById("dropdownMenu").classList.toggle("hidden");
-    }
-    function logout() {
-      localStorage.removeItem("userId");
-      localStorage.removeItem("username");
-      alert("👋 ออกจากระบบแล้ว");
-      location.reload();
-    }
-    window.onload = () => {
-      const userId = localStorage.getItem("userId");
-      const username = localStorage.getItem("username") || "";
-      const isLoggedIn = !!userId;
-      document.getElementById("authButtons").style.display = isLoggedIn ? "none" : "flex";
-      document.getElementById("profileDropdown").style.display = isLoggedIn ? "block" : "none";
-      if (isLoggedIn) {
-        document.getElementById("profileInitial").innerText = username.charAt(0).toUpperCase();
+    <script>
+      const API = 'https://project-6m94.onrender.com';
+  
+      function openLoginModal() {
+        document.getElementById("loginModal").classList.remove("hidden");
       }
-    }
-  </script>
+      function closeLoginModal() {
+        document.getElementById("loginModal").classList.add("hidden");
+      }
+      function openRegisterModal() {
+        document.getElementById("registerModal").classList.remove("hidden");
+      }
+      function closeRegisterModal() {
+        document.getElementById("registerModal").classList.add("hidden");
+      }
+      function toggleDropdown() {
+        document.getElementById("dropdownMenu").classList.toggle("hidden");
+      }
+      function logout() {
+        localStorage.removeItem("userId");
+        localStorage.removeItem("username");
+        alert("👋 ออกจากระบบแล้ว");
+        location.reload();
+      }
+  
+      async function login() {
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+        if (!username || !password) return alert("กรุณากรอก username และ password ให้ครบ");
+        try {
+          const res = await fetch(`/api/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert("✅ เข้าสู่ระบบสำเร็จ");
+            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("username", username);
+            location.reload();
+          } else {
+            alert("❌ " + data.message);
+          }
+        } catch (err) {
+          alert("❌ ไม่สามารถเข้าสู่ระบบได้: " + err.message);
+        }
+      }
+  
+      async function register() {
+        const username = document.getElementById("registerUsername").value;
+        const password = document.getElementById("registerPassword").value;
+        if (!username || !password) return alert("กรุณากรอก username และ password ให้ครบ");
+        try {
+          const res = await fetch(`/api/auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await res.json();
+          if (data.success) {
+            alert("✅ สมัครสมาชิกสำเร็จ");
+            localStorage.setItem("userId", data.userId);
+            localStorage.setItem("username", username);
+            location.reload();
+          } else {
+            alert("❌ " + data.message);
+          }
+        } catch (err) {
+          alert("❌ ไม่สามารถสมัครสมาชิกได้: " + err.message);
+        }
+      }
+  
+      // ✅ Show/hide UI when logged in
+      window.onload = () => {
+        const userId = localStorage.getItem("userId");
+        const username = localStorage.getItem("username") || "";
+        const isLoggedIn = !!userId;
+        document.getElementById("authButtons").style.display = isLoggedIn ? "none" : "flex";
+        document.getElementById("profileDropdown").style.display = isLoggedIn ? "block" : "none";
+        if (isLoggedIn) {
+          document.getElementById("profileInitial").innerText = username.charAt(0).toUpperCase();
+        }
+      };
+    </script>
 </body>
 </html>
