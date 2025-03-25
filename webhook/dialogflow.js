@@ -52,9 +52,9 @@ router.post('/', async (req, res) => {
     // ✅ คำนวณคะแนนรวม และระดับความเครียด
     const totalScore = scores.reduce((a, b) => a + b, 0);
     let stressLevel = "";
-    if (totalScore <= 20) stressLevel = "ความเครียดระดับ 1";
-    else if (totalScore <= 40) stressLevel = "ความเครียดระดับ 2";
-    else if (totalScore <= 60) stressLevel = "ความเครียดระดับ 3";
+    if (totalScore <= 23) stressLevel = "ความเครียดระดับ 1";
+    else if (totalScore <= 41) stressLevel = "ความเครียดระดับ 2";
+    else if (totalScore <= 61) stressLevel = "ความเครียดระดับ 3";
     else stressLevel = "ความเครียดระดับ 4";
 
     // ✅ บันทึกลง MongoDB
