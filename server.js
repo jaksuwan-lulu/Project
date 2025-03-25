@@ -27,8 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/auth', authRoutes);
 app.use('/api/survey', surveyRoutes);
 app.use('/webhook/dialogflow', dialogflowWebhook);
-app.use(express.json());
-
 
 // ✅ สำหรับเปิดไฟล์ HTML เท่านั้น
 app.get('/*.html', (req, res) => {
