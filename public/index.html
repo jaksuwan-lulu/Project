@@ -36,21 +36,15 @@
 
   <body class="bg-white text-gray-900">
     <!-- Responsive Navbar -->
-    <header class="bg-green-900 text-white shadow-md">
-      <div class="container mx-auto flex justify-between items-center p-4">
+    <header class="bg-green-900 text-white py-4 px-4 sm:px-8 shadow-md">
+      <div class="container mx-auto flex items-center justify-between">
         <h1 class="text-2xl font-bold">Rimberio</h1>
-        <button id="menuBtn" class="md:hidden text-white focus:outline-none text-3xl">☰</button>
-        <nav id="navMenu" class="hidden md:flex md:space-x-6 text-sm md:text-base">
-          <a href="index.html" class="hover:underline">หน้าแรก</a>
-          <a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a>
-          <a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a>
-          <a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a>
-        </nav>
-        <div id="authButtons" class="space-x-2 hidden md:block">
-          <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
-          <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
+        <div class="sm:hidden">
+          <button onclick="toggleMobileMenu()" class="text-white text-2xl">
+            ☰
+          </button>
         </div>
-        <div id="profileDropdown" class="relative hidden md:block">
+        <div id="profileDropdown" class="hidden sm:block relative">
           <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center" onclick="toggleDropdown()">
             <span id="profileInitial">U</span>
           </button>
@@ -60,15 +54,24 @@
           </div>
         </div>
       </div>
-      <div id="mobileMenu" class="hidden bg-green-800 px-4 py-3 md:hidden">
-        <a href="index.html" class="block py-1 hover:underline">หน้าแรก</a>
-        <a href="about_stress.html" class="block py-1 hover:underline">เกี่ยวกับความเครียด</a>
-        <a href="stress_levels.html" class="block py-1 hover:underline">ระดับความเครียด</a>
-        <a href="support_channels.html" class="block py-1 hover:underline">ช่องทางให้คำปรึกษา</a>
-      </div>
+    
+      <!-- Mobile Menu -->
+      <nav id="mobileMenu" class="sm:hidden mt-4 hidden">
+        <ul class="flex flex-col items-center gap-4">
+          <li><a href="index.html" class="hover:underline">หน้าแรก</a></li>
+          <li><a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a></li>
+          <li><a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a></li>
+          <li><a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a></li>
+          <div class="flex gap-2">
+            <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
+            <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
+          </div>
+        </ul>
+      </nav>
     </header>
+    
 
-    <main class="container mx-auto py-12 px-6 md:px-8 lg:px-16">
+    <main class="container mx-auto mt-6 py-12 px-6 md:px-8 lg:px-16">
       <div class="flex flex-col-reverse lg:flex-row items-center gap-10">
         <!-- Text Block -->
         <div class="w-full lg:w-1/2">
@@ -219,5 +222,12 @@
       mobileMenu.classList.toggle("hidden");
     });
   </script>
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById("mobileMenu");
+      menu.classList.toggle("hidden");
+    }
+  </script>
+  
 </body>
 </html>
