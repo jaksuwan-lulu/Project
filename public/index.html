@@ -1,105 +1,121 @@
 <!DOCTYPE html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Rimberio - ประเมินความเครียด</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script>
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rimberio - ประเมินความเครียด</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script>
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-        fetch("/api/survey/summary")
-          .then(response => response.json())
-          .then(data => {
-            const chartData = [['ระดับความเครียด', 'จำนวนคน']];
-            data.forEach(item => chartData.push([item.stressLevel, item.count]));
-            const dataTable = google.visualization.arrayToDataTable(chartData);
-            const options = {
-              title: 'สถิติระดับความเครียดของผู้ใช้งาน',
-              pieHole: 0.4,
-              chartArea: {width: '90%', height: '80%'},
-              colors: ['#4CAF50', '#FFC107', '#FF5722', '#D32F2F']
-            };
-            const chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            chart.draw(dataTable, options);
-          })
-          .catch(error => {
-            console.error("เกิดข้อผิดพลาด:", error);
-            document.getElementById('piechart').innerHTML = "<p class='text-red-600 text-center'>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
-          });
-      }
-    </script>
-  </head>
+    function drawChart() {
+      fetch("/api/survey/summary")
+        .then(response => response.json())
+        .then(data => {
+          const chartData = [['ระดับความเครียด', 'จำนวนคน']];
+          data.forEach(item => chartData.push([item.stressLevel, item.count]));
+          const dataTable = google.visualization.arrayToDataTable(chartData);
+          const options = {
+            title: 'สถิติระดับความเครียดของผู้ใช้งาน',
+            pieHole: 0.4,
+            chartArea: {width: '90%', height: '80%'},
+            colors: ['#4CAF50', '#FFC107', '#FF5722', '#D32F2F']
+          };
+          const chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(dataTable, options);
+        })
+        .catch(error => {
+          console.error("เกิดข้อผิดพลาด:", error);
+          document.getElementById('piechart').innerHTML = "<p class='text-red-600 text-center'>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
+        });
+    }
+  </script>
+  <style>
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: white;
+      transition: width 0.3s ease-in-out;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
 
-  <body class="bg-white text-gray-900">
-    <!-- Responsive Navbar -->
-    <header class="bg-green-900 text-white py-4 px-4 sm:px-8 shadow-md">
-      <div class="container mx-auto flex items-center justify-between">
-        <h1 class="text-2xl font-bold">Rimberio</h1>
-        <div class="sm:hidden">
-          <button onclick="toggleMobileMenu()" class="text-white text-2xl">
-            ☰
-          </button>
+  <!-- ✅ Navbar -->
+  <header class="bg-green-900 text-white px-6 py-4 shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <h1 class="text-2xl font-bold">Rimberio</h1>
+      <button class="block md:hidden focus:outline-none" onclick="toggleMobileMenu()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <!-- Desktop Menu -->
+      <nav class="hidden md:flex items-center space-x-6">
+        <a href="index.html" class="nav-link relative hover:underline">หน้าแรก</a>
+        <a href="about_stress.html" class="nav-link relative hover:underline">เกี่ยวกับความเครียด</a>
+        <a href="stress_levels.html" class="nav-link relative hover:underline">ระดับความเครียด</a>
+        <a href="support_channels.html" class="nav-link relative hover:underline">ช่องทางให้คำปรึกษา</a>
+        <div id="authButtons" class="flex space-x-2 ml-4">
+          <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
+          <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
         </div>
-        <div id="profileDropdown" class="hidden sm:block relative">
+        <div id="profileDropdown" class="relative hidden">
           <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center" onclick="toggleDropdown()">
             <span id="profileInitial">U</span>
           </button>
-          <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg border border-gray-200 hidden z-50">
-            <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Profile</a>
-            <button onclick="logout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+          <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg border hidden z-50">
+            <a href="dashboard.html" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
+            <button onclick="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
           </div>
         </div>
-      </div>
-    
-      <!-- Mobile Menu -->
-      <nav id="mobileMenu" class="sm:hidden mt-4 hidden">
-        <ul class="flex flex-col items-center gap-4">
-          <li><a href="index.html" class="hover:underline">หน้าแรก</a></li>
-          <li><a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a></li>
-          <li><a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a></li>
-          <li><a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a></li>
-          <div class="flex gap-2">
-            <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
-            <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
-          </div>
-        </ul>
       </nav>
-    </header>
-    
-
-    <main class="container mx-auto mt-6 py-12 px-6 md:px-8 lg:px-16">
-      <div class="flex flex-col-reverse lg:flex-row items-center gap-10">
-        <!-- Text Block -->
-        <div class="w-full lg:w-1/2">
-          <h2 class="text-3xl md:text-4xl font-bold text-green-900 mb-4 text-center lg:text-left">
-            คิดว่าคุณมี<br class="hidden lg:block">ความเครียดแค่ไหน ?
-          </h2>
-          <p class="text-gray-700 text-center lg:text-left">
-            ความเครียดเป็นส่วนหนึ่งของชีวิต แต่การรับรู้ระดับความเครียดของตนเองสามารถช่วยให้เราจัดการกับมันได้ดีขึ้น มาดูระดับความเครียดของคุณกันเถอะ!
-          </p>
-          <div class="mt-6 flex justify-center lg:justify-start">
-            <a href="about_stress.html" class="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition">เริ่มต้น →</a>
-          </div>
-        </div>
-
-        <!-- Chart Block -->
-        <div class="w-full lg:w-1/2">
-          <div class="bg-green-700 text-white rounded-lg flex items-center justify-center w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px]">
-            <div id="piechart" class="w-full h-full"></div>
-          </div>
-        </div>
+    </div>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="md:hidden hidden mt-4 space-y-2 text-center">
+      <a href="index.html" class="block">หน้าแรก</a>
+      <a href="about_stress.html" class="block">เกี่ยวกับความเครียด</a>
+      <a href="stress_levels.html" class="block">ระดับความเครียด</a>
+      <a href="support_channels.html" class="block">ช่องทางให้คำปรึกษา</a>
+      <div id="authButtonsMobile" class="space-x-2 mt-2">
+        <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
+        <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
       </div>
-    </main>
+    </div>
+  </header>
 
-    <df-messenger intent="WELCOME" chat-title="บอทความเครียด" agent-id="1e39fe9e-753e-4ebd-9029-7902adf6d9c8" language-code="th"
-      style="--df-messenger-button-titlebar-color: #2E7D32; --df-messenger-send-icon: #2E7D32;">
-      <df-messenger-chat-bubble user-id="" id="chat-bubble"></df-messenger-chat-bubble>
-    </df-messenger>
-    <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <!-- ✅ Main Content -->
+  <main class="container mx-auto px-6 py-12">
+    <div class="flex flex-col lg:flex-row items-center gap-10">
+      <!-- Text -->
+      <div class="w-full lg:w-1/2 text-center lg:text-left">
+        <h2 class="text-3xl md:text-4xl font-bold text-green-900">คิดว่าคุณมี<br class="hidden lg:inline">ความเครียดแค่ไหน ?</h2>
+        <p class="mt-4 text-gray-700">ความเครียดเป็นส่วนหนึ่งของชีวิต แต่การรับรู้ระดับความเครียดของตนเองสามารถช่วยให้เราจัดการกับมันได้ดีขึ้น มาดูระดับความเครียดของคุณกันเถอะ!</p>
+        <a href="about_stress.html" class="mt-6 inline-block bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition">เริ่มต้น →</a>
+      </div>
+      <!-- Chart -->
+      <div class="w-full lg:w-1/2 mt-10 lg:mt-0">
+        <div id="piechart" class="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px]"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ✅ Chatbot -->
+  <df-messenger intent="WELCOME" chat-title="บอทความเครียด" agent-id="1e39fe9e-753e-4ebd-9029-7902adf6d9c8" language-code="th"
+    style="--df-messenger-button-titlebar-color: #2E7D32; --df-messenger-send-icon: #2E7D32;">
+    <df-messenger-chat-bubble user-id="" id="chat-bubble"></df-messenger-chat-bubble>
+  </df-messenger>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
   <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
     <div class="bg-white p-6 rounded-lg w-80">
       <h2 class="text-xl font-semibold mb-4 text-green-800">เข้าสู่ระบบ</h2>
@@ -224,9 +240,33 @@
   </script>
   <script>
     function toggleMobileMenu() {
-      const menu = document.getElementById("mobileMenu");
-      menu.classList.toggle("hidden");
+      document.getElementById("mobileMenu").classList.toggle("hidden");
     }
+
+    function toggleDropdown() {
+      document.getElementById("dropdownMenu").classList.toggle("hidden");
+    }
+
+    function logout() {
+      localStorage.removeItem("userId");
+      localStorage.removeItem("username");
+      alert("👋 ออกจากระบบแล้ว");
+      location.reload();
+    }
+
+    window.onload = () => {
+      const userId = localStorage.getItem("userId");
+      const username = localStorage.getItem("username") || "";
+      const isLoggedIn = !!userId;
+      document.getElementById("authButtons").style.display = isLoggedIn ? "none" : "flex";
+      document.getElementById("authButtonsMobile").style.display = isLoggedIn ? "none" : "flex";
+      document.getElementById("profileDropdown").style.display = isLoggedIn ? "block" : "none";
+
+      if (isLoggedIn) {
+        document.getElementById("profileInitial").innerText = username.charAt(0).toUpperCase();
+        document.querySelector("df-messenger").setAttribute("user-id", userId);
+      }
+    };
   </script>
   
 </body>
