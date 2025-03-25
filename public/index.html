@@ -1,64 +1,85 @@
 <!DOCTYPE html>
 <html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Rimberio - ประเมินความเครียด</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script>
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-      fetch("/api/survey/summary")
-        .then(response => response.json())
-        .then(data => {
-          const chartData = [['ระดับความเครียด', 'จำนวนคน']];
-          data.forEach(item => chartData.push([item.stressLevel, item.count]));
-          const dataTable = google.visualization.arrayToDataTable(chartData);
-          const options = {
-            title: 'สถิติระดับความเครียดของผู้ใช้งาน',
-            pieHole: 0.4,
-            chartArea: {width: '90%', height: '80%'},
-            colors: ['#4CAF50', '#FFC107', '#FF5722', '#D32F2F']
-          };
-          const chart = new google.visualization.PieChart(document.getElementById('piechart'));
-          chart.draw(dataTable, options);
-        })
-        .catch(error => {
-          console.error("เกิดข้อผิดพลาด:", error);
-          document.getElementById('piechart').innerHTML = "<p class='text-red-600 text-center'>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
-        });
-    }
-  </script>
-</head>
-
-<body class="bg-white text-gray-900">
-  <header class="bg-green-900 text-white py-4 px-8 flex justify-between items-center shadow-md">
-    <h1 class="text-2xl font-bold">Rimberio</h1>
-    <nav>
-      <ul class="flex space-x-6">
-        <li><a href="index.html" class="hover:underline">หน้าแรก</a></li>
-        <li><a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a></li>
-        <li><a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a></li>
-        <li><a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a></li>
-      </ul>
-    </nav>
-    <div id="authButtons" class="space-x-2">
-      <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
-      <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
-    </div>
-    <div id="profileDropdown" class="relative hidden">
-      <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center" onclick="toggleDropdown()">
-        <span id="profileInitial">U</span>
-      </button>
-      <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg border border-gray-200 hidden z-50">
-        <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Profile</a>
-        <button onclick="logout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Rimberio - ประเมินความเครียด</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+    
+      function drawChart() {
+        fetch("/api/survey/summary")
+          .then(response => response.json())
+          .then(data => {
+            const chartData = [['ระดับความเครียด', 'จำนวนคน']];
+            data.forEach(item => chartData.push([item.stressLevel, item.count]));
+            const dataTable = google.visualization.arrayToDataTable(chartData);
+            const options = {
+              title: 'สถิติระดับความเครียดของผู้ใช้งาน',
+              pieHole: 0.4,
+              chartArea: {width: '90%', height: '80%'},
+              colors: ['#4CAF50', '#FFC107', '#FF5722', '#D32F2F']
+            };
+            const chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(dataTable, options);
+          })
+          .catch(error => {
+            console.error("เกิดข้อผิดพลาด:", error);
+            document.getElementById('piechart').innerHTML = "<p class='text-red-600 text-center'>เกิดข้อผิดพลาดในการโหลดข้อมูล</p>";
+          });
+      }
+    </script>
+    
+    <style>
+      .nav-link {
+        position: relative;
+      }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0%;
+        height: 2px;
+        background-color: white;
+        transition: width 0.3s ease-in-out;
+      }
+      .nav-link:hover::after {
+        width: 100%;
+      }
+    </style>
+  </head>
+  
+  <body class="bg-white text-gray-900">
+    <header class="bg-green-900 text-white py-4 px-8 shadow-md">
+      <div class="container mx-auto flex justify-between items-center">
+        <h1 class="text-2xl font-bold">Rimberio</h1>
+        <nav>
+          <ul class="flex space-x-6 text-sm md:text-base">
+            <li><a href="index.html" class="nav-link hover:underline">หน้าแรก</a></li>
+            <li><a href="about_stress.html" class="nav-link hover:underline">เกี่ยวกับความเครียด</a></li>
+            <li><a href="stress_levels.html" class="nav-link hover:underline">ระดับความเครียด</a></li>
+            <li><a href="support_channels.html" class="nav-link hover:underline">ช่องทางให้คำปรึกษา</a></li>
+          </ul>
+        </nav>
+        <div id="authButtons" class="space-x-2">
+          <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200 transition">Login</button>
+          <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition">Register</button>
+        </div>
+        <div id="profileDropdown" class="relative hidden">
+          <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center transition-transform hover:scale-105" onclick="toggleDropdown()">
+            <span id="profileInitial">U</span>
+          </button>
+          <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white rounded shadow-lg border border-gray-200 hidden z-50">
+            <a href="dashboard.html" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Profile</a>
+            <button onclick="logout()" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
+          </div>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
 
   <main class="container mx-auto py-16 px-8 flex justify-between items-center">
     <div class="max-w-lg">
@@ -102,7 +123,7 @@
     </div>
   </div>
 
-  <script>
+  <script> 
     const API = 'https://project-6m94.onrender.com';
 
     function openLoginModal() {
@@ -192,5 +213,5 @@
       }
     }
   </script>
-</body>
+  </body>
 </html>
