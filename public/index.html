@@ -51,35 +51,27 @@
 <body class="bg-white text-gray-900">
 
   <!-- ✅ Navbar -->
-  <header class="bg-green-900 text-white shadow-md">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-4">
-      <!-- Logo -->
+  <header class="bg-green-900 text-white px-6 py-4 shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
       <h1 class="text-2xl font-bold">Rimberio</h1>
-  
-      <!-- Hamburger Icon (Mobile only) -->
-      <button id="menuToggle" class="md:hidden focus:outline-none">
+      <button class="block md:hidden focus:outline-none" onclick="toggleMobileMenu()">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M4 6h16M4 12h16M4 18h16" />
         </svg>
       </button>
-  
       <!-- Desktop Menu -->
       <nav class="hidden md:flex items-center space-x-6">
-        <a href="index.html" class="hover:underline">หน้าแรก</a>
-        <a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a>
-        <a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a>
-        <a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a>
-  
-        <!-- Auth Buttons -->
+        <a href="index.html" class="nav-link relative hover:underline">หน้าแรก</a>
+        <a href="about_stress.html" class="nav-link relative hover:underline">เกี่ยวกับความเครียด</a>
+        <a href="stress_levels.html" class="nav-link relative hover:underline">ระดับความเครียด</a>
+        <a href="support_channels.html" class="nav-link relative hover:underline">ช่องทางให้คำปรึกษา</a>
         <div id="authButtons" class="flex space-x-2 ml-4">
           <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
           <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
         </div>
-  
-        <!-- Profile Icon -->
         <div id="profileDropdown" class="relative hidden">
-          <button onclick="toggleDropdown()" class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center">
+          <button class="w-9 h-9 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center" onclick="toggleDropdown()">
             <span id="profileInitial">U</span>
           </button>
           <div id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg border hidden z-50">
@@ -89,45 +81,18 @@
         </div>
       </nav>
     </div>
-  
-    <!-- Mobile Fullscreen Menu -->
-    <div id="mobileMenu" class="fixed inset-0 bg-white text-black z-50 hidden flex flex-col px-6 py-6 space-y-6">
-      <div class="flex items-center justify-between">
-        <h1 class="text-xl font-bold text-green-900">Rimberio</h1>
-        <button onclick="toggleMobileMenu()">
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-  
-      <nav class="flex flex-col gap-4 text-lg">
-        <a href="index.html" class="hover:underline">หน้าแรก</a>
-        <a href="about_stress.html" class="hover:underline">เกี่ยวกับความเครียด</a>
-        <a href="stress_levels.html" class="hover:underline">ระดับความเครียด</a>
-        <a href="support_channels.html" class="hover:underline">ช่องทางให้คำปรึกษา</a>
-      </nav>
-  
-      <!-- Mobile Auth Buttons -->
-      <div id="authButtonsMobile" class="flex space-x-2 mt-4">
-        <button onclick="openLoginModal()" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">Login</button>
-        <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Register</button>
-      </div>
-  
-      <!-- Profile Icon (Mobile) -->
-      <div id="profileDropdownMobile" class="relative hidden mt-4">
-        <button onclick="toggleDropdown()" class="w-10 h-10 bg-gray-400 rounded-full text-white font-bold flex items-center justify-center">
-          <span id="profileInitialMobile">U</span>
-        </button>
-        <div id="dropdownMenu" class="absolute left-0 mt-2 w-40 bg-white text-black rounded shadow-lg border hidden z-50">
-          <a href="dashboard.html" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
-          <button onclick="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100">Logout</button>
-        </div>
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="md:hidden hidden mt-4 space-y-2 text-center">
+      <a href="index.html" class="block">หน้าแรก</a>
+      <a href="about_stress.html" class="block">เกี่ยวกับความเครียด</a>
+      <a href="stress_levels.html" class="block">ระดับความเครียด</a>
+      <a href="support_channels.html" class="block">ช่องทางให้คำปรึกษา</a>
+      <div id="authButtonsMobile" class="space-x-2 mt-2">
+        <button onclick="openLoginModal()" class="bg-white text-green-900 px-3 py-1 rounded hover:bg-gray-200">Login</button>
+        <button onclick="openRegisterModal()" class="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600">Register</button>
       </div>
     </div>
   </header>
-  
 
   <!-- ✅ Main Content -->
   <main class="container mx-auto px-6 py-12">
@@ -273,43 +238,37 @@
       mobileMenu.classList.toggle("hidden");
     });
   </script>
+
   <script>
     function toggleMobileMenu() {
       document.getElementById("mobileMenu").classList.toggle("hidden");
     }
-  
+
     function toggleDropdown() {
       document.getElementById("dropdownMenu").classList.toggle("hidden");
     }
-  
+
     function logout() {
       localStorage.removeItem("userId");
       localStorage.removeItem("username");
       alert("👋 ออกจากระบบแล้ว");
       location.reload();
     }
-  
+
     window.onload = () => {
       const userId = localStorage.getItem("userId");
       const username = localStorage.getItem("username") || "";
       const isLoggedIn = !!userId;
-  
       document.getElementById("authButtons").style.display = isLoggedIn ? "none" : "flex";
       document.getElementById("authButtonsMobile").style.display = isLoggedIn ? "none" : "flex";
       document.getElementById("profileDropdown").style.display = isLoggedIn ? "block" : "none";
-      document.getElementById("profileDropdownMobile").style.display = isLoggedIn ? "block" : "none";
-  
+
       if (isLoggedIn) {
-        const initial = username.charAt(0).toUpperCase();
-        document.getElementById("profileInitial").innerText = initial;
-        document.getElementById("profileInitialMobile").innerText = initial;
-  
-        const dfFrame = document.querySelector("df-messenger");
-        if (dfFrame) dfFrame.setAttribute("user-id", userId);
+        document.getElementById("profileInitial").innerText = username.charAt(0).toUpperCase();
+        document.querySelector("df-messenger").setAttribute("user-id", userId);
       }
-    }
+    };
   </script>
-  
   
 </body>
 </html>
